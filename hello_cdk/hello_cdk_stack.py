@@ -13,10 +13,13 @@ class HelloCdkStack(cdk.Stack):
     def __init__(self, scope: cdk.Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # The code that defines your stack goes here
-        # WARNING: change the bucket setup so that it won't be public!!!
-#        bucket = s3.Bucket(self, 
-#            "MyFirstBucket",
-#            versioned=True,
-#            removal_policy=core.RemovalPolicy.DESTROY,
-#            auto_delete_objects=True)
+        bucket = s3.Bucket(self, 
+            id='MyFirstBucket',
+            bucket_name='mjheitland-my-first-bucket',
+            versioned=False,
+            removal_policy=core.RemovalPolicy.DESTROY, # what happens to the resource (i.e. bucket) if the CFN stack gets deleted: default = DESTORY, alternative: RETAIN and SNAPSHOT
+            auto_delete_objects=True,
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
+            access_control=s3.BucketAccessControl.PRIVATE,
+            # todo disable object deletion for prod, not yet supported in CDK
+        )
